@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev # Default profile
+  
+  application:
+    name: ppdt-backend
+
+
+

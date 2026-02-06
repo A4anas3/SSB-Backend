@@ -1,0 +1,40 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:18080/realms/ssb-realm
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ppdtcore
+    username: postgres
+    password: ${POSTGRES_PASSWORD}
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+app:
+  frontend-url: http://localhost:5173
+  keycloak-url: http://localhost:18080
+
+  config:
+    activate:
+      on-profile: dev
+
+keycloak:
+  base-url: http://localhost:18080
+  realm: ssb-realm
+  client-id: ssb-backend
+  client-secret: ${KEYCLOAK_CLIENT_SECRET}
+
+server:
+  port: 9000
+
+fastapi:
+  news:
+    url: http://localhost:8000/news
+  analyse:
+    url: http://localhost:8001/analyze/ppdt

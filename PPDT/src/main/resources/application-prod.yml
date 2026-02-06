@@ -1,0 +1,36 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate # never update schema in prod automatically
+    show-sql: false
+
+app:
+  frontend-url: ${FRONTEND_URL}
+  keycloak-url: ${KEYCLOAK_BASE_URL}
+
+  config:
+    activate:
+      on-profile: prod
+
+server:
+  port: 10000
+
+fastapi:
+  news:
+    url: ${NEWS_SERVICE_URL}
+  analyse:
+    url: ${ANALYSE_SERVICE_URL}

@@ -1,0 +1,95 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: ppdt_postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - ppdt_network
+
+  mongo:
+    image: mongo:6.0
+    container_name: ppdt_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ppdt_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: ppdt_keycloak
+    ports:
+      - "18080:8080"
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    command: start-dev --import-realm
+    volumes:
+      - ./realm-config.json:/opt/keycloak/data/import/realm-config.json
+
+    depends_on:
+      - postgres
+    networks:
+      - ppdt_network
+
+  news-service:
+    build:
+      context: "../News Section"
+    container_name: ppdt_news_service
+    ports:
+      - "8000:8000"
+    networks:
+      - ppdt_network
+
+  ppdt-backend:
+    build:
+      context: "../PPDT"
+    container_name: ppdt_backend
+    ports:
+      - "10000:10000"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://postgres:5432/ssb_db
+      DB_USER: ${POSTGRES_USER}
+      DB_PASS: ${POSTGRES_PASSWORD}
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/ssb-realm
+      KEYCLOAK_BASE_URL: http://keycloak:8080
+      NEWS_SERVICE_URL: http://news-service:8000/news
+      ANALYSE_SERVICE_URL: http://analyse-service:8001/analyze/ppdt
+      MONGO_URI: mongodb://mongo:27017/ppdt # Note: Mongo service not yet defined, adding placeholder or verifying
+    depends_on:
+      - postgres
+      - keycloak
+    networks:
+      - ppdt_network
+
+  analyse-service:
+    build:
+      context: "../Analyse"
+    container_name: ppdt_analyse_service
+    ports:
+      - "8001:8001"
+    networks:
+      - ppdt_network
+
+volumes:
+  postgres_data:
+  mongo_data:
+
+
+networks:
+  ppdt_network:
+    driver: bridge

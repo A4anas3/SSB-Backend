@@ -1,0 +1,40 @@
+# System Files
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Java / Maven
+target/
+*.class
+.mvn/wrapper/maven-wrapper.properties
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+.output/
+
+# Keycloak / Docker Volumes
+postgres-data/
+postgres_data/
+docker-services/realm-config.json

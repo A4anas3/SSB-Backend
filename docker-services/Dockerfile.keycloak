@@ -1,0 +1,7 @@
+FROM quay.io/keycloak/keycloak:latest
+
+COPY realm-config.json /opt/keycloak/data/import/realm-config.json
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh","start-dev","--http-port","10000","--import-realm"]
+# Enable metrics/health endpoints if needed, though start-dev handles this
+ENV KC_METRICS_ENABLED=true
+ENV KC_HEALTH_ENABLED=true
