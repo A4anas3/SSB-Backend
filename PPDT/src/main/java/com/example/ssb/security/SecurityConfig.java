@@ -55,29 +55,29 @@ public class SecurityConfig {
         return http.build();
     }
 
+@Bean
+public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-        
-        // Custom converter to extract roles from Keycloak's nested structure
-        jwtConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            // Extract realm_access.roles from JWT
-            Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
-            
-            if (realmAccess == null || !realmAccess.containsKey("roles")) {
-                return java.util.Collections.emptyList();
-            }
-            
-            @SuppressWarnings("unchecked")
-            java.util.List<String> roles = (java.util.List<String>) realmAccess.get("roles");
-            
-            // Convert to Spring Security authorities with ROLE_ prefix
-            return roles.stream()
-                    .map(role -> new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + role))
-                    .collect(java.util.stream.Collectors.toList());
-        });
-        
-        return jwtConverter;
-    }
+    JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+
+    jwtConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
+
+        Map<String, Object> appMetadata = jwt.getClaimAsMap("app_metadata");
+
+        if (appMetadata == null || !appMetadata.containsKey("role")) {
+            return java.util.Collections.emptyList();
+        }
+
+        String role = (String) appMetadata.get("role");
+
+        return java.util.List.of(
+                new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + role)
+        );
+    });
+
+    return jwtConverter;
 }
+
+   
+    }
+
