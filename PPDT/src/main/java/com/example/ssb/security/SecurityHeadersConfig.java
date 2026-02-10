@@ -18,8 +18,8 @@ public class SecurityHeadersConfig implements Filter {
     @org.springframework.beans.factory.annotation.Value("${app.frontend-url}")
     private String frontendUrl;
 
-    @org.springframework.beans.factory.annotation.Value("${app.keycloak-url}")
-    private String keycloakUrl;
+    @org.springframework.beans.factory.annotation.Value("${app.auth-url}")
+    private String authUrl;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -33,7 +33,7 @@ public class SecurityHeadersConfig implements Filter {
                 "script-src 'self'",
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                 "font-src 'self' https://fonts.gstatic.com",
-                "connect-src 'self' " + keycloakUrl + " " + frontendUrl,
+                "connect-src 'self' " + authUrl + " " + frontendUrl,
                 "img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com https:",
                 "frame-ancestors 'none'",
                 "base-uri 'self'",

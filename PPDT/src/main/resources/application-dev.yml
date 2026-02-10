@@ -18,7 +18,7 @@ spring:
 
 app:
   frontend-url: http://localhost:5173/
-  keycloak-url: http://localhost:18080
+  auth-url: http://localhost:18080
 
   config:
     activate:
