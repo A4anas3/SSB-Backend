@@ -34,7 +34,7 @@ public class SecurityHeadersConfig implements Filter {
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                 "font-src 'self' https://fonts.gstatic.com",
                 "connect-src 'self' " + keycloakUrl + " " + frontendUrl,
-                "img-src 'self' data: blob: https:",
+                "img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com https:",
                 "frame-ancestors 'none'",
                 "base-uri 'self'",
                 "form-action 'self'"

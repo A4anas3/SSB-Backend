@@ -59,17 +59,19 @@ services:
       context: "../PPDT"
     container_name: ppdt_backend
     ports:
-      - "10000:10000"
+      - "9000:9000"
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      SERVER_PORT: 9000
       DB_URL: jdbc:postgresql://postgres:5432/ssb_db
       DB_USER: ${POSTGRES_USER}
       DB_PASS: ${POSTGRES_PASSWORD}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
       KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/ssb-realm
       KEYCLOAK_BASE_URL: http://keycloak:8080
       NEWS_SERVICE_URL: http://news-service:8000/news
       ANALYSE_SERVICE_URL: http://analyse-service:8001/analyze/ppdt
-      MONGO_URI: mongodb://mongo:27017/ppdt # Note: Mongo service not yet defined, adding placeholder or verifying
+      MONGO_URI: ${MONGO_URI}
     depends_on:
       - postgres
       - keycloak

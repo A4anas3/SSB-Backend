@@ -20,14 +20,17 @@ spring:
 
 app:
   frontend-url: ${FRONTEND_URL}
-  keycloak-url: ${KEYCLOAK_BASE_URL}
+
 
   config:
     activate:
       on-profile: prod
 
-server:
-  port: 10000
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+
 
 fastapi:
   news:

@@ -21,7 +21,9 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of(frontendUrl));
+        // Support multiple origins (comma-separated)
+        List<String> origins = List.of(frontendUrl.split(","));
+        config.setAllowedOrigins(origins);
 
         config.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"

@@ -35,11 +35,11 @@ public class SecurityConfig {
                         // ✅ Public endpoints
                         .requestMatchers(
                                 "/api/oir/tests/**",
-                                "/actuator/**"
+                                "/admin/ppdt/image"
                         ).permitAll()
 
                         // 🔐 Admin-only APIs
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // 🔐 Everything else needs login
                         .anyRequest().authenticated()

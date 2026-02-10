@@ -7,22 +7,27 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/ppdtcore
     username: postgres
-    password: ${POSTGRES_PASSWORD}
+    password: 00889977
   data:
     mongodb:
-      uri: ${MONGO_URI}
+      uri: mongodb+srv://a4anaskhan3:00889977%40a@cluster0.u3vfif2.mongodb.net/ppdtcore
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
 app:
-  frontend-url: http://localhost:5173
+  frontend-url: http://localhost:5173/
   keycloak-url: http://localhost:18080
 
   config:
     activate:
       on-profile: dev
+
+cloudinary:
+  cloud-name: dh0yikasy
+  api-key: 419343789612165
+  api-secret: T1WQcAxQHCWaLrVrGW6vl0GQQxA
 
 keycloak:
   base-url: http://localhost:18080
