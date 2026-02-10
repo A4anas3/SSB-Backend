@@ -3,7 +3,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${SUPABASE_URL}
+          issuer-uri: ${SUPABASE_URL}/auth/v1/keys
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USER}
@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate # never update schema in prod automatically
+      ddl-auto: create # never update schema in prod automatically
     show-sql: false
 
 app:
