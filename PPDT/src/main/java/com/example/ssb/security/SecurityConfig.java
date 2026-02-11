@@ -50,8 +50,8 @@ public class SecurityConfig {
 
                         ).permitAll()
 
-                        // 🔐 Admin-only APIs
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                
+                       .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // 🔐 Everything else needs login
                         .anyRequest().authenticated()
