@@ -1,6 +1,9 @@
-package com.example.ssb.pschycological.wat;
+package com.example.ssb.pschycological.wat.service;
 
 
+import com.example.ssb.pschycological.wat.repo.WordTestRepository;
+import com.example.ssb.pschycological.wat.dto.TestNameDto;
+import com.example.ssb.pschycological.wat.entity.WordTest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

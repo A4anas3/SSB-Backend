@@ -1,8 +1,11 @@
-package com.example.ssb.pschycological.srt;
+package com.example.ssb.pschycological.srt.controller;
 
 
 
 
+import com.example.ssb.pschycological.srt.entity.SrtTest;
+import com.example.ssb.pschycological.srt.service.SrtTestService;
+import com.example.ssb.pschycological.srt.dto.TestNameDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

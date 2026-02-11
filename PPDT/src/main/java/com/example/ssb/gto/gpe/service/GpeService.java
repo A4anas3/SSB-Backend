@@ -80,7 +80,7 @@ public class GpeService {
     }
 
     private String uploadToCloudinary(MultipartFile file) throws IOException {
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "gto"));
         return uploadResult.get("url").toString();
     }
 

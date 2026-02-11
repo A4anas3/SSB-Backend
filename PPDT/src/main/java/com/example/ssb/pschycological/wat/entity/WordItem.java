@@ -1,7 +1,6 @@
-package com.example.ssb.pschycological.wat;
+package com.example.ssb.pschycological.wat.entity;
 
 import lombok.Data;
-import java.util.List;
 
 @Data
 public class WordItem {

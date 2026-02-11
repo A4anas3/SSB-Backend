@@ -1,4 +1,4 @@
-package com.example.ssb.pschycological.srt;
+package com.example.ssb.pschycological.srt.entity;
 
 import lombok.Data;
 

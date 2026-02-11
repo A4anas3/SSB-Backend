@@ -2,8 +2,8 @@ package com.example.ssb.interview.controller;
 
 
 
-import com.example.ssb.interview.RapidFireQuestion;
-import com.example.ssb.interview.RapidFireQuestionService;
+import com.example.ssb.interview.entity.RapidFireQuestion;
+import com.example.ssb.interview.service.RapidFireQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

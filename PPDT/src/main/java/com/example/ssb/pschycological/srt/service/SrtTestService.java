@@ -1,7 +1,10 @@
-package com.example.ssb.pschycological.srt;
+package com.example.ssb.pschycological.srt.service;
 
 
 
+import com.example.ssb.pschycological.srt.dto.TestNameDto;
+import com.example.ssb.pschycological.srt.entity.SrtTest;
+import com.example.ssb.pschycological.srt.repo.SrtTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

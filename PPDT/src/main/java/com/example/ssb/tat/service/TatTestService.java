@@ -171,7 +171,7 @@ public class TatTestService {
     }
 
     private String uploadToCloudinary(MultipartFile file) throws IOException {
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "tat"));
         return uploadResult.get("url").toString();
     }
 

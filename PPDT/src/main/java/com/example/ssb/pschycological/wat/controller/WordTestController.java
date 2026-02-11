@@ -1,7 +1,10 @@
-package com.example.ssb.pschycological.wat;
+package com.example.ssb.pschycological.wat.controller;
 
 
 
+import com.example.ssb.pschycological.wat.dto.TestNameDto;
+import com.example.ssb.pschycological.wat.entity.WordTest;
+import com.example.ssb.pschycological.wat.service.WordTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

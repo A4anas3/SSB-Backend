@@ -1,4 +1,4 @@
-package com.example.ssb.pschycological.srt;
+package com.example.ssb.pschycological.srt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

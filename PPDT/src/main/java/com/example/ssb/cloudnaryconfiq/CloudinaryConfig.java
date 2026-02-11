@@ -1,4 +1,4 @@
-package com.example.ssb.ppdt.config;
+package com.example.ssb.cloudnaryconfiq;
 
 import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Value;

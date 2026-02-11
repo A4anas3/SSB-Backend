@@ -1,13 +1,11 @@
-package com.example.ssb.interview;
+package com.example.ssb.interview.entity;
 
 
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data

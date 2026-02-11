@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/ppdt")
 @RequiredArgsConstructor
-//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 public class PPDTAdminController {
 
     private final PPDTImageService imageService;

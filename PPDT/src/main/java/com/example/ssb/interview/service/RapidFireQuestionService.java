@@ -1,9 +1,9 @@
-package com.example.ssb.interview;
+package com.example.ssb.interview.service;
 
 
 
-import com.example.ssb.interview.RapidFireQuestion;
-import com.example.ssb.interview.RapidFireQuestionRepository;
+import com.example.ssb.interview.entity.RapidFireQuestion;
+import com.example.ssb.interview.repo.RapidFireQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

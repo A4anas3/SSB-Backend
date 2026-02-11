@@ -34,8 +34,20 @@ public class SecurityConfig {
 
                         // ✅ Public endpoints
                         .requestMatchers(
-                                "/api/oir/tests/**",
-                                "/admin/ppdt/image"
+                                "/gto/gpe/sample",
+                                "/gto/gpe/test",
+                                "/gto/lecturette",
+                                "/gto/lecturette/search",
+                                "/gto/lecturette/api/oir/tests",
+                                "/gto/lecturette/search/category",
+                                "/gto/lecturette//basic",
+                                "/interview/rapid-fire",
+                                "/ppdt/samples",
+                                "/srt/user/tests/names",
+                                "/wat/user//tests/names"
+
+
+
                         ).permitAll()
 
                         // 🔐 Admin-only APIs

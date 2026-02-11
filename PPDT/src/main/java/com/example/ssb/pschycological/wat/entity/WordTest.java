@@ -1,4 +1,4 @@
-package com.example.ssb.pschycological.wat;
+package com.example.ssb.pschycological.wat.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

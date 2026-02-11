@@ -82,7 +82,7 @@ public class PPDTImageService {
     }
 
     private String uploadToCloudinary(MultipartFile file) throws IOException {
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "ppdt"));
         return uploadResult.get("url").toString();
     }
 

@@ -1,40 +1,39 @@
-package com.example.ssb.pschycological.wat;
+package com.example.ssb.pschycological.srt.controller;
 
 
-
+import com.example.ssb.pschycological.srt.entity.SrtTest;
+import com.example.ssb.pschycological.srt.service.SrtTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/wat/admin")
+@RequestMapping("/srt/admin")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
-public class WordTestAdminController {
+public class SrtTestAdminController {
 
-    private final WordTestService service;
+    private final SrtTestService service;
 
-    // ✅ Create test
     @PostMapping("/tests")
-    public ResponseEntity<WordTest> createTest(@RequestBody WordTest test) {
+    public ResponseEntity<SrtTest> createTest(@RequestBody SrtTest test) {
         return ResponseEntity.ok(service.createTest(test));
     }
 
-    // ✅ Patch word or sentence
     @PatchMapping("/tests/{id}")
-    public ResponseEntity<WordTest> updateFullTest(
+    public ResponseEntity<SrtTest> updateFullTest(
             @PathVariable String id,
-            @RequestBody WordTest updatedTest) {
+            @RequestBody SrtTest updatedTest) {
 
         return ResponseEntity.ok(service.updateFullTest(id, updatedTest));
     }
 
 
-    // ✅ Delete test
     @DeleteMapping("/tests/{id}")
     public ResponseEntity<String> deleteTest(@PathVariable String id) {
         service.deleteTest(id);
-        return ResponseEntity.ok("Test deleted successfully");
+        return ResponseEntity.ok("SRT Test deleted successfully");
     }
 }
+
