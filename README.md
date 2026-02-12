@@ -21,9 +21,9 @@ A robust, microservices-based backend powering the **SSB (Services Selection Boa
     *   `News Section`: Aggregates defense news from RSS feeds.
 
 ### Infrastructure & Data
-*   **Database (Relational)**: PostgreSQL (User data, Keycloak)
+*   **Database (Relational)**: PostgreSQL (User data)
 *   **Database (NoSQL)**: MongoDB Atlas (PPDT scenarios, unstructured data)
-*   **Authentication**: Keycloak (OAuth2 / OIDC)
+*   **Authentication**: Supabase (Requests & Auth)
 *   **Media**: Cloudinary (Image storage)
 
 ---
@@ -37,7 +37,7 @@ graph TD
     end
 
     subgraph "API Gateway / Auth"
-        KC[Keycloak Identity Provider]
+        SUPA[Supabase Auth]
         SB[Spring Boot Backend]
     end
 
@@ -54,8 +54,8 @@ graph TD
 
     %% Flows
     UI -->|Bearer Token| SB
-    UI -.->|Auth Redirect| KC
-    SB <-->|Validate Token| KC
+    UI -.->|Auth / Login| SUPA
+    SB <-->|Validate JWT| SUPA
 
     SB <-->|User/Admin Data| PG
     SB <-->|Stories & Metadata| MONGO
@@ -101,8 +101,9 @@ sequenceDiagram
 ### 1. Prerequisites
 *   Java 17+
 *   Python 3.10+
-*   Docker (for Keycloak & PostgreSQL)
+*   Docker (for PostgreSQL)
 *   MongoDB Atlas Account
+*   Supabase Account
 
 ### 2. Environment Variables
 Create a `.env` file in the root directory (or ensure your environment has these keys):
@@ -111,14 +112,14 @@ Create a `.env` file in the root directory (or ensure your environment has these
 # Database
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=your_password
-POSTGRES_DB=keycloak
+POSTGRES_DB=ppdtcore
 MONGO_URI=mongodb+srv://...
 
-# Keycloak
-KEYCLOAK_ADMIN=admin
-KEYCLOAK_ADMIN_PASSWORD=admin
-KEYCLOAK_CLIENT_SECRET=your_client_secret
-KEYCLOAK_ISSUER_URI=http://localhost:18080/realms/ssb-realm
+# Authentication (Supabase)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_anon_key
+# The issuer URI is usually: https://<project-ref>.supabase.co/auth/v1
+KEYCLOAK_ISSUER_URI=https://<project-ref>.supabase.co/auth/v1
 
 # Cloudinary
 CLOUDINARY_CLOUD_NAME=your_cloud_name
@@ -134,8 +135,8 @@ ANALYSE_SERVICE_URL=http://localhost:8001/analyze/ppdt
 
 #### Step 1: Start Infrastructure (Docker)
 ```bash
-# Start Postgres and Keycloak
-docker-compose up -d
+# Start Postgres
+docker-compose up -d postgres
 ```
 
 #### Step 2: Start Microservices
