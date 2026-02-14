@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * Security Headers Filter
- * Adds CSP and other security headers to protect against XSS, clickjacking, etc.
+ * Adds CSP and other security headers
  */
 @Component
 @Order(1)
@@ -27,35 +27,52 @@ public class SecurityHeadersConfig implements Filter {
 
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // Build CSP dynamically
+        // =========================
+        // CONTENT SECURITY POLICY
+        // =========================
         String cspPolicy = String.join("; ",
+
+                // default
                 "default-src 'self'",
-                "script-src 'self'",
+
+                // scripts (React/Vite support)
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
+
+                // styles
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-                "font-src 'self' https://fonts.gstatic.com",
-                "connect-src 'self' " + authUrl + " " + frontendUrl,
+
+                // fonts
+                "font-src 'self' https://fonts.gstatic.com data:",
+
+                // 🔥 MOST IMPORTANT (API CALLS)
+                "connect-src 'self' " + frontendUrl + " " + authUrl +
+                        " https://*.supabase.co" +
+                        " wss://*.supabase.co" +
+                        " https://api.cloudinary.com" +
+                        " https://*.railway.app" +
+                        " https://*.cloudflare.com" +
+                        " https://*.cloudflareworkers.com" +
+                        " https:",
+
+                // images
                 "img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com https:",
+
+                // security
                 "frame-ancestors 'none'",
                 "base-uri 'self'",
                 "form-action 'self'"
         );
 
-        // 🔐 Content Security Policy - Prevents XSS by restricting script sources
         httpResponse.setHeader("Content-Security-Policy", cspPolicy);
 
-        // 🔐 Prevent MIME-type sniffing
+        // =========================
+        // OTHER SECURITY HEADERS
+        // =========================
         httpResponse.setHeader("X-Content-Type-Options", "nosniff");
-
-        // 🔐 Prevent clickjacking
         httpResponse.setHeader("X-Frame-Options", "DENY");
-
-        // 🔐 Legacy XSS filter (for older browsers)
         httpResponse.setHeader("X-XSS-Protection", "1; mode=block");
-
-        // 🔐 Control referrer information
         httpResponse.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
 
-        // 🔐 Prevent caching of sensitive data
         httpResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
         httpResponse.setHeader("Pragma", "no-cache");
 
