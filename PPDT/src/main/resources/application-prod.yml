@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # never update schema in prod automatically
+      ddl-auto: create  # never update schema in prod automatically
     show-sql: true
 
 app:

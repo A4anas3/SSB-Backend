@@ -7,34 +7,14 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PPDTAnalysisResponseDTO {
 
-    /* =========================
-       CORE PERCEPTION
-       ========================= */
-    private Integer numberOfCharacters;
-    private Boolean basicDetailsIdentified;
-    private Float perceptionScore;
+    // "valid" or "invalid"
+    private String status;
 
-    /* =========================
-       STORY QUALITY
-       ========================= */
-    private Boolean logicalAndComplete;
-    private Boolean positiveAndRealistic;
-    private Float storyScore;
+    // 0–10 score
+    private Float finalScore;
 
-    /* =========================
-       EXPRESSION
-       ========================= */
-    private Integer wordCount;
-    private Float clarityScore;
-
-    /* =========================
-       OLQ SIGNAL
-       ========================= */
-    private Float officerLikeThinkingScore;
-
-    /* =========================
-       FINAL RESULT
-       ========================= */
-    private Float overallPpdtScore;
-    private String feedback;
+    private String overallFeedback;
+    private String improvements;
+    private String message;
+    private String sampleStory;
 }

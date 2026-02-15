@@ -40,11 +40,12 @@ public class SecurityConfig {
                                 "/gto/lecturette/search",
                                 "/gto/lecturette/api/oir/tests",
                                 "/gto/lecturette/search/category",
-                                "/gto/lecturette//basic",
+                                "/gto/lecturette/basic",
                                 "/interview/rapid-fire",
                                 "/ppdt/samples",
                                 "/srt/user/tests/names",
-                                "/wat/user//tests/names"
+                                "/wat/user/tests/names"
+
 
 
 

@@ -17,11 +17,13 @@ public class FastApiClient {
         this.webClient = webClientBuilder.build();
     }
 
-    public Map<String, Object> analyzePPDT(String imageContext, String storyText) {
+    public Map<String, Object> analyzePPDT(String imageContext, String storyText, String action) {
 
-        Map<String, String> request = new HashMap<>();
+        Map<String, Object> request = new HashMap<>();
         request.put("image_context", imageContext);
-        request.put("story_text", storyText);
+        request.put("story", storyText);
+        request.put("action", action);
+        request.put("age", 20);
 
         return webClient.post()
                 .uri(analyseUrl)

@@ -1,7 +1,8 @@
 package com.example.ssb.ppdt.controller;
 
 import com.example.ssb.ppdt.DTO.PPDTAnalysisResponseDTO;
-import com.example.ssb.ppdt.DTO.PPDTSampleResponse;
+import com.example.ssb.ppdt.DTO.PPDTFullImageResponse;
+
 import com.example.ssb.ppdt.DTO.PPDTSubmitRequest;
 import com.example.ssb.ppdt.DTO.PPDTTestImageResponse;
 import com.example.ssb.ppdt.Entity.PPDTImage;
@@ -20,28 +21,28 @@ public class PPDTController {
     private final PPDTImageService imgservice;
     private final PPDTService service;
 
+
+
     @PostMapping("/submit")
-    @Transactional
-    public PPDTAnalysisResponseDTO submit( @RequestBody PPDTSubmitRequest req) {
+    public PPDTAnalysisResponseDTO submit(@RequestBody PPDTSubmitRequest req) {
 
         PPDTImage image = imgservice.getById(req.getImageId());
 
         return service.submit(
-                req.getImageId(),
                 image.getImageContext(),
                 req.getStoryText(),
-                req.getAction()
+                req.getAction(),
+                image.getSampleStory()
         );
     }
-
     @GetMapping("/test/images")
     public List<PPDTTestImageResponse> getTestImages() {
         return imgservice.getTestImages();
     }
 
     @GetMapping("/samples")
-    public List<PPDTSampleResponse> getAllSamplePPDTs() {
-        return imgservice.getAllSamplePPDTs();
+    public List<PPDTFullImageResponse> getAllImages() {
+        return imgservice.getAllImages();
     }
 
 }

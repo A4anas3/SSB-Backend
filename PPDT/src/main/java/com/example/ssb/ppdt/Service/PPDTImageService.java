@@ -3,9 +3,7 @@ package com.example.ssb.ppdt.Service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.ssb.ppdt.DTO.PPDTAdminImageResponse;
-import com.example.ssb.ppdt.DTO.PPDTSampleResponse;
-import com.example.ssb.ppdt.DTO.PPDTTestImageResponse;
+import com.example.ssb.ppdt.DTO.*;
 import com.example.ssb.ppdt.Entity.PPDTImage;
 import com.example.ssb.ppdt.Repo.PPDTImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,59 +24,69 @@ public class PPDTImageService {
     private final PPDTImageRepository imageRepo;
     private final Cloudinary cloudinary;
 
-    /* =========================
-       ADMIN: ADD IMAGE
-       (always normal image)
-       ========================= */
-    /* =========================
-       ADMIN: ADD IMAGE
-       (always normal image)
-       ========================= */
-    public PPDTImage saveImage(MultipartFile file, String imageContext, String guide) {
+
+    public PPDTImage saveImage(PPDTImageDTO dto) {
 
         try {
-            String imageUrl = uploadToCloudinary(file);
+            String imageUrl = uploadToCloudinary(dto.getImage());
 
-            PPDTImage image = new PPDTImage();
-            image.setImageUrl(imageUrl);
-            image.setImageContext(imageContext);
-            image.setGuide(guide);
+            PPDTImage entity = new PPDTImage();
+            entity.setImageUrl(imageUrl);
+            entity.setImageContext(dto.getImageContext());
+            entity.setGuide(dto.getGuide());
+            entity.setIsSample(dto.getIsSample() != null ? dto.getIsSample() : false);
+            entity.setAction(dto.getAction());
+            entity.setSampleStory(dto.getSampleStory());
 
-            image.setIsSample(false);
-            image.setAction(null);
-            image.setSampleStory(null);
+            return imageRepo.save(entity);
 
-            return imageRepo.save(image);
         } catch (IOException e) {
             throw new RuntimeException("Image upload failed: " + e.getMessage());
         }
     }
 
 
-    /* =========================
-       ADMIN: UPDATE IMAGE
-       ========================= */
-    /* =========================
-       ADMIN: UPDATE IMAGE
-       ========================= */
-    public PPDTImage updateImage(Long id, MultipartFile file, String imageContext, String guide) {
+    public PPDTImage patchImage(Long id, PPDTImagePatchDTO dto) {
 
         PPDTImage image = imageRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        if (file != null && !file.isEmpty()) {
-            try {
-                String imageUrl = uploadToCloudinary(file);
+        try {
+
+            /* ---------- IMAGE ---------- */
+            if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+                String imageUrl = uploadToCloudinary(dto.getImage());
                 image.setImageUrl(imageUrl);
-            } catch (IOException e) {
-                throw new RuntimeException("Image upload failed: " + e.getMessage());
             }
+
+            /* ---------- TEXT FIELDS ---------- */
+            if (dto.getImageContext() != null) {
+                image.setImageContext(dto.getImageContext());
+            }
+
+            if (dto.getGuide() != null) {
+                image.setGuide(dto.getGuide());
+            }
+
+            /* ---------- SAMPLE FLAG ---------- */
+            if (dto.getIsSample() != null) {
+                image.setIsSample(dto.getIsSample());
+            }
+
+            /* ---------- SAMPLE DATA ---------- */
+            if (dto.getAction() != null) {
+                image.setAction(dto.getAction());
+            }
+
+            if (dto.getSampleStory() != null) {
+                image.setSampleStory(dto.getSampleStory());
+            }
+
+            return imageRepo.save(image);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Patch failed: " + e.getMessage());
         }
-
-        if (imageContext != null) image.setImageContext(imageContext);
-        if (guide != null) image.setGuide(guide);
-
-        return imageRepo.save(image);
     }
 
     private String uploadToCloudinary(MultipartFile file) throws IOException {
@@ -109,60 +117,41 @@ public class PPDTImageService {
     }
 
 
-    public PPDTImage toggleSample(Long id, String action, String sampleStory) {
+
+
+
+    public PPDTImage toggleSample(Long id) {
 
         PPDTImage image = imageRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        // If this image is already sample → just remove sample
-        if (Boolean.TRUE.equals(image.getIsSample())) {
-            image.setIsSample(false);
-            image.setAction(null);
-            image.setSampleStory(null);
-            return imageRepo.save(image);
-        }
+        Boolean current = image.getIsSample() != null ? image.getIsSample() : false;
 
-
-
-        // Mark current as sample
-        image.setIsSample(true);
-        image.setAction(action);
-        image.setSampleStory(sampleStory);
+        image.setIsSample(!current); // 🔥 toggle
 
         return imageRepo.save(image);
     }
 
 
-    public List<PPDTSampleResponse> getAllSamplePPDTs() {
+    public List<PPDTFullImageResponse> getAllImages() {
 
-        List<PPDTImage> samples = imageRepo.findAllByIsSampleTrue();
-
-        if (samples.isEmpty()) {
-            throw new RuntimeException("No sample PPDTs configured");
-        }
-
-        return samples.stream()
-                .map(this::mapToSampleResponse)
-                .toList();
-    }
-
-    /* =========================
-       USER: TEST MODE
-       (same images, limited data)
-       ========================= */
-    public List<PPDTTestImageResponse> getTestImages() {
-
-        return imageRepo.findAllByIsSampleFalse()
+        return imageRepo.findAll()
                 .stream()
                 .map(img -> {
-                    PPDTTestImageResponse res = new PPDTTestImageResponse();
+                    PPDTFullImageResponse res = new PPDTFullImageResponse();
+
                     res.setId(img.getId());
                     res.setImageUrl(img.getImageUrl());
+                    res.setImageContext(img.getImageContext());
+                    res.setGuide(img.getGuide());
+                    res.setIsSample(img.getIsSample());
+                    res.setAction(img.getAction());
+                    res.setSampleStory(img.getSampleStory());
+
                     return res;
                 })
                 .toList();
     }
-
 
     /* =========================
        INTERNAL USE
@@ -186,19 +175,30 @@ public class PPDTImageService {
                 .toList();
     }
 
-    private PPDTSampleResponse mapToSampleResponse(PPDTImage img) {
+    public List<PPDTTestImageResponse> getTestImages() {
 
-        if (!Boolean.TRUE.equals(img.getIsSample())) {
-            throw new RuntimeException("Requested image is not a sample");
-        }
+        return imageRepo.findAllByIsSampleFalse()
+                .stream()
+                .map(img -> {
+                    PPDTTestImageResponse res = new PPDTTestImageResponse();
+                    res.setId(img.getId());
+                    res.setImageUrl(img.getImageUrl());
+                    return res;
+                })
+                .toList();
+    }
+    public PPDTFullImageResponse getFullImageById(Long id) {
+        PPDTImage img = imageRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        PPDTSampleResponse res = new PPDTSampleResponse();
+        PPDTFullImageResponse res = new PPDTFullImageResponse();
         res.setId(img.getId());
         res.setImageUrl(img.getImageUrl());
         res.setImageContext(img.getImageContext());
+        res.setGuide(img.getGuide());
+        res.setIsSample(img.getIsSample());
         res.setAction(img.getAction());
         res.setSampleStory(img.getSampleStory());
-        res.setGuide(img.getGuide());
 
         return res;
     }
