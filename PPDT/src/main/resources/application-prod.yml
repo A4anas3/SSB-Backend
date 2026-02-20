@@ -44,7 +44,8 @@ fastapi:
   tat: ${FASTAPI_TAT_URL}
   news:
     url: ${NEWS_SERVICE_URL}
-
+  analyse:
+    url: ${ANALYSE_SERVICE_URL}
 ai:
   lecturette:
     url: ${AI_LECTURETTE_URL}
