@@ -36,6 +36,10 @@ cloudinary:
   api-key: ${CLOUDINARY_API_KEY}
   api-secret: ${CLOUDINARY_API_SECRET}
 
+deepgram:
+  api-key: ${DEEPGRAM_API_KEY:}
+  project-id: ${DEEPGRAM_PROJECT_ID:}
+
 
 
 server:
