@@ -51,11 +51,10 @@ public class SecurityHeadersConfig implements Filter {
                         " https://api.cloudinary.com" +
                         " https://*.railway.app" +
                         " https://*.cloudflare.com" +
-                        " https://*.cloudflareworkers.com" +
-                        " https:",
+                        " https://*.cloudflareworkers.com",
 
                 // images
-                "img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com https:",
+                "img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com",
 
                 // security
                 "frame-ancestors 'none'",

@@ -33,26 +33,26 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // ✅ Public endpoints
-                        .requestMatchers(
-                                "/gto/gpe/sample",
-                                "/gto/gpe/test",
-                                "/gto/lecturette",
-                                "/gto/lecturette/search",
-                                "/gto/lecturette/api/oir/tests",
-                                "/gto/lecturette/search/category",
-                                "/gto/lecturette/basic",
-                                "/interview/rapid-fire",
-                                "/ppdt/samples",
-                                "/srt/user/tests/names",
-                                "/wat/user/tests/names"
-
-
-
-
-                        ).permitAll()
+//                        .requestMatchers(
+//                                "/gto/gpe/sample",
+//                                "/gto/gpe/test",
+//                                "/gto/lecturette",
+//                                "/gto/lecturette/search",
+//                                "/gto/lecturette/api/oir/tests",
+//                                "/gto/lecturette/search/category",
+//                                "/gto/lecturette/basic",
+//                                "/interview/rapid-fire",
+//                                "/ppdt/samples",
+//                                "/srt/user/tests/names",
+//                                "/wat/user/tests/names"
+//
+//
+//
+//
+//                        ).permitAll()
 
                 
-                       .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**", "/srt/admin/**", "/wat/admin/**", "/api/admin/**").hasRole("ADMIN")
 
                         // 🔐 Everything else needs login
                         .anyRequest().authenticated()

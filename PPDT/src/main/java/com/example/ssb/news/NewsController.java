@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/news")
-public class controller {
+public class NewsController {
 
     @Autowired
     private NewsService newsService;

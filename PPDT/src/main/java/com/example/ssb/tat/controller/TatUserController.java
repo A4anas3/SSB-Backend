@@ -3,6 +3,9 @@ package com.example.ssb.tat.controller;
 import com.example.ssb.tat.dto.TatTestCardDto;
 import com.example.ssb.tat.dto.TatTestDto;
 import com.example.ssb.tat.dto.TatTestSampleDto;
+import com.example.ssb.tat.dto.TatTestSampleDto;
+import com.example.ssb.tat.dto.TatSubmitRequest;
+import com.example.ssb.tat.dto.TatAnalysisResponse;
 import com.example.ssb.tat.service.TatTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +31,10 @@ public class TatUserController {
     @GetMapping("/sample/{testId}")
     public TatTestSampleDto getSample(@PathVariable Long testId) {
         return tatTestService.getSampleByTestId(testId);
+    }
+
+    @PostMapping("/submit")
+    public TatAnalysisResponse submitTest(@RequestBody TatSubmitRequest request) {
+        return tatTestService.submitTest(request);
     }
 }

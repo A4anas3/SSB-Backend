@@ -21,13 +21,14 @@ public class PPDTImage {
     @Column(columnDefinition = "TEXT")
     private String imageContext;
 
-
+    @Column(columnDefinition = "TEXT")
     private String guide;
 
     /* SAMPLE FLAG */
     private Boolean isSample = false;
 
     /* SAMPLE-ONLY DATA */
+    @Column(columnDefinition = "TEXT")
     private String action;
 
     @Column(columnDefinition = "TEXT")

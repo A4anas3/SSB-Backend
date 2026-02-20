@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 import feedparser
 import time
 import threading
@@ -38,7 +37,7 @@ SOURCE_PRIORITY = {
 SOURCE_MAX_AGE = {
     "bbc": 24 * 60 * 60,                # 1 day
     "hindu": 24 * 60 * 60,              # 1 day
-    "indiandefense": 5 * 24 * 60 * 60   # 🔥 5 days
+    "indiandefense": 5 * 24 * 60 * 60   # 5 days
 }
 
 REFRESH_INTERVAL = 8 * 60 * 60  # refresh every 8 hours
@@ -146,7 +145,7 @@ def build_daily_digest():
 
 # ------------------ BACKGROUND JOB ------------------
 
-def refresh_loop():
+def _refresh_loop():
     while True:
         try:
             print("\n📰 Refresh cycle started")
@@ -157,31 +156,16 @@ def refresh_loop():
 
         time.sleep(REFRESH_INTERVAL)
 
-# ------------------ FASTAPI ------------------
 
-app = FastAPI(title="Defence & World News (BBC + Hindu + Indian Defence)")
-
-@app.on_event("startup")
-def start_background_task():
-    print("🚀 FastAPI started, launching background refresh thread")
+def start_news_refresh():
+    """Call this once at app startup to begin the background refresh thread."""
+    print("🚀 Launching news background refresh thread")
     threading.Thread(
-        target=refresh_loop,
+        target=_refresh_loop,
         daemon=True
     ).start()
 
-@app.get("/")
-def health():
-    return {
-        "status": "ok",
-        "sources": list(RSS_FEEDS.keys()),
-        "last_updated": DAILY_DIGEST["date"]
-    }
 
-@app.get("/news")
-def get_news():
-    print("📤 /news endpoint called")
-    return {
-        "last_updated": DAILY_DIGEST["date"],
-        "count": len(DAILY_DIGEST["news"]),
-        "news": DAILY_DIGEST["news"]
-    }
+def get_daily_digest():
+    """Return the current cached digest dict."""
+    return DAILY_DIGEST

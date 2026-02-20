@@ -3,6 +3,8 @@ package com.example.ssb.pschycological.wat.controller;
 
 
 import com.example.ssb.pschycological.wat.dto.TestNameDto;
+import com.example.ssb.pschycological.wat.dto.WatSubmitRequest;
+import com.example.ssb.pschycological.wat.dto.WatSubmitResponse;
 import com.example.ssb.pschycological.wat.entity.WordTest;
 import com.example.ssb.pschycological.wat.service.WordTestService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,10 @@ public class WordTestController {
     @GetMapping("/tests/{id}")
     public ResponseEntity<WordTest> getTest(@PathVariable String id) {
         return ResponseEntity.ok(service.getTestById(id));
+    }
+    @PostMapping("/submit")
+    public WatSubmitResponse submit(@RequestBody WatSubmitRequest request) {
+        return service.submitTest(request);
     }
 
 

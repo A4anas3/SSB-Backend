@@ -1,7 +1,9 @@
 package com.example.ssb.ppdt.Client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,11 +12,14 @@ public class FastApiClient {
 
     private final WebClient webClient;
 
-    @org.springframework.beans.factory.annotation.Value("${fastapi.analyse.url}")
+    @Value("${fastapi.analyse.url}")
     private String analyseUrl;
 
-    public FastApiClient(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+    @Value("${app.api-key}")
+    private String apiKey;
+
+    public FastApiClient(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     public Map<String, Object> analyzePPDT(String imageContext, String storyText, String action) {
@@ -26,10 +31,12 @@ public class FastApiClient {
         request.put("age", 20);
 
         return webClient.post()
-                .uri(analyseUrl)
+                .uri(analyseUrl)   // only path here
+                .header("X-API-Key", apiKey)
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(Map.class)
-                .block(); // ⚠️ Blocking for compatibility with PPDTService (JPA)
+                .timeout(java.time.Duration.ofSeconds(30))
+                .block();
     }
 }

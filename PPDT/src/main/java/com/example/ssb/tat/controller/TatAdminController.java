@@ -1,7 +1,6 @@
 package com.example.ssb.tat.controller;
 
 import com.example.ssb.tat.dto.AdminTatTestDto;
-import com.example.ssb.tat.entity.TatTest;
 import com.example.ssb.tat.entity.TatImage;
 
 import com.example.ssb.tat.service.TatTestService;
@@ -20,11 +19,7 @@ public class TatAdminController {
 
     private final TatTestService tatAdminService;
 
-    /* ================= CREATE ================= */
-    @PostMapping
-    public TatTest createTest(@RequestBody AdminTatTestDto dto) {
-        return tatAdminService.createTest(dto);
-    }
+
 
     /* ================= ADD IMAGE ================= */
     @PostMapping(value = "/{testId}/image")

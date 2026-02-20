@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -27,6 +29,13 @@ public class TatTestService {
     private final TatTestRepository tatTestRepository;
     private final TatImageRepository tatImageRepository;
     private final Cloudinary cloudinary;
+    private final WebClient webClient;
+
+    @Value("${fastapi.tat}")
+    private String tatUrl;
+
+    @Value("${app.api-key}")
+    private String apiKey;
 
     /* =====================================================
        USER APIs
@@ -93,19 +102,49 @@ public class TatTestService {
         return dto;
     }
 
+    /* USER: SUBMIT TEST */
+    public TatAnalysisResponse submitTest(TatSubmitRequest request) {
+        TatTest test = tatTestRepository.findById(request.getTestId())
+                .orElseThrow(() -> new RuntimeException("TAT Test not found"));
+
+        // O(1) lookup for images by ID
+        var imageMap = test.getImages().stream()
+                .collect(java.util.stream.Collectors.toMap(TatImage::getId, img -> img));
+
+        // Inject context from DB into each user answer
+        for (TatStoryInput answer : request.getAnswers()) {
+            TatImage img = imageMap.get(answer.getImageId());
+            if (img != null && img.getImageContext() != null) {
+                answer.setContext(img.getImageContext());
+            }
+        }
+
+        // Call AI
+        TatAnalysisResponse aiResponse = webClient.post()
+                .uri(tatUrl)
+                .header("X-API-Key", apiKey)
+                .bodyValue(request.getAnswers())
+                .retrieve()
+                .bodyToMono(TatAnalysisResponse.class)
+                .timeout(java.time.Duration.ofSeconds(60))
+                .block();
+
+        // Merge imgurl + DB story into response items
+        aiResponse.getItems().forEach(item -> {
+            TatImage img = imageMap.get(item.getImageId());
+            if (img != null) {
+                item.setImgurl(img.getImageUrl());
+                item.setDbStory(img.getStory());
+            }
+        });
+
+        return aiResponse;
+    }
+
     /* =====================================================
        ADMIN APIs
     ===================================================== */
 
-    /* ADMIN: CREATE TEST */
-    /* ADMIN: CREATE TEST (Shell only) */
-    public TatTest createTest(AdminTatTestDto dto) {
-        TatTest test = TatTest.builder()
-                .testName(dto.getTestName())
-                .images(new ArrayList<>())
-                .build();
-        return tatTestRepository.save(test);
-    }
 
     /* ADMIN: ADD IMAGE TO TEST */
     public TatImage addTatImage(Long testId, MultipartFile file, String imageContext, String expectedTheme, String story) {

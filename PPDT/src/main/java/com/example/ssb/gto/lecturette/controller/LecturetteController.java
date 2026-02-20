@@ -1,10 +1,13 @@
 package com.example.ssb.gto.lecturette.controller;
 
 import com.example.ssb.gto.lecturette.Entity.Lecturette;
+import com.example.ssb.gto.lecturette.dto.LecturetteAnalysisRequest;
+import com.example.ssb.gto.lecturette.dto.LecturetteAnalysisResponse;
+
 import com.example.ssb.gto.lecturette.dto.basic;
 import com.example.ssb.gto.lecturette.service.LecturetteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +48,36 @@ public class LecturetteController {
         List<Lecturette> result = lecturetteService.searchByCategory(category);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategories() {
+        return ResponseEntity.ok(lecturetteService.getDistinctCategories());
+    }
+
     @GetMapping("/basic")
     public ResponseEntity<List<basic>> getBasicLecturettes() {
         return ResponseEntity.ok(lecturetteService.getBasicLecturettes());
+    }
+    // ===============================
+// 🎯 RANDOM TOPIC FOR TEST
+// ===============================
+    @GetMapping("/test/random")
+    public ResponseEntity<Lecturette> getRandomLecturette() {
+        return ResponseEntity.ok(lecturetteService.getRandomLecturette());
+    }
+
+ 
+    // ===============================
+// 🤖 SEND TO AI SERVICE
+// ===============================
+    @PostMapping("/test/analyse")
+    public ResponseEntity<LecturetteAnalysisResponse> analyseLecturette(
+            @RequestBody LecturetteAnalysisRequest request) {
+
+        LecturetteAnalysisResponse response =
+                lecturetteService.analyse(request);
+
+        return ResponseEntity.ok(response);
     }
 
 

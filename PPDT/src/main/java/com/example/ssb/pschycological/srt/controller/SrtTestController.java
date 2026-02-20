@@ -3,6 +3,8 @@ package com.example.ssb.pschycological.srt.controller;
 
 
 
+import com.example.ssb.pschycological.srt.dto.SrtAiResponse;
+import com.example.ssb.pschycological.srt.dto.SrtSubmitRequest;
 import com.example.ssb.pschycological.srt.entity.SrtTest;
 import com.example.ssb.pschycological.srt.service.SrtTestService;
 import com.example.ssb.pschycological.srt.dto.TestNameDto;
@@ -27,5 +29,9 @@ public class SrtTestController {
     @GetMapping("/tests/{id}")
     public ResponseEntity<SrtTest> getTest(@PathVariable String id) {
         return ResponseEntity.ok(service.getTestById(id));
+    }
+    @PostMapping("/submit")
+    public SrtAiResponse submit(@RequestBody SrtSubmitRequest request) {
+        return service.submitTest(request);
     }
 }

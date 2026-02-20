@@ -14,6 +14,9 @@ public class NewsService {
     @Value("${fastapi.news.url}")
     private String fastApiUrl;
 
+    @Value("${app.api-key}")
+    private String apiKey;
+
     public NewsService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.build();
     }
@@ -21,7 +24,9 @@ public class NewsService {
     public Mono<NewsResponse> getLatestNews() {
         return webClient.get()
                 .uri(fastApiUrl)
+                .header("X-API-Key", apiKey)
                 .retrieve()
-                .bodyToMono(NewsResponse.class);
+                .bodyToMono(NewsResponse.class)
+                .timeout(java.time.Duration.ofSeconds(10));
     }
 }

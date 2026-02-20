@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   security:
     oauth2:
       resourceserver:
@@ -15,12 +19,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create  # never update schema in prod automatically
-    show-sql: true
+      ddl-auto: validate  # never update schema in prod automatically
+    show-sql: false
 
 app:
   frontend-url: ${FRONTEND_URL}
   auth-url: ${SUPABASE_URL}
+  api-key: ${SSB_API_KEY}
 
 
   config:
@@ -34,7 +39,13 @@ cloudinary:
 
 
 fastapi:
+  srt: ${FASTAPI_SRT_URL}
+  wat: ${FASTAPI_WAT_URL}
+  tat: ${FASTAPI_TAT_URL}
   news:
     url: ${NEWS_SERVICE_URL}
   analyse:
     url: ${ANALYSE_SERVICE_URL}
+ai:
+  lecturette:
+    url: ${AI_LECTURETTE_URL}
