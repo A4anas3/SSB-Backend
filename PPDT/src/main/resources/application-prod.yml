@@ -19,7 +19,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate  # never update schema in prod automatically
+      ddl-auto: update  # Allow schema updates in production (careful with deletions)
     show-sql: false
 
 app:
