@@ -56,12 +56,12 @@ public class DeepgramController {
             );
 
             Map<String, Object> responseBody = response.getBody();
-            if (responseBody != null && responseBody.containsKey("api_key")) {
-                Map<String, String> result = new HashMap<>();
-                result.put("key", (String) responseBody.get("api_key"));
-                return result;
-            } else {
-                 throw new RuntimeException("Deepgram API did not return an api_key");
+            if (responseBody != null && responseBody.containsKey("key")) {
+    Map<String, String> result = new HashMap<>();
+    result.put("key", (String) responseBody.get("key"));
+    return result;
+}else {
+                throw new RuntimeException("Deepgram API did not return an api_key");
             }
 
         } catch (Exception e) {
