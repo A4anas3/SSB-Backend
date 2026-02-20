@@ -7,7 +7,7 @@ def get_srt_batch_chain():
 
     llm = ChatOpenAI(
         model="llama3.1-8b",
-        api_key=os.getenv("CEREBRAS_LECTURETTE_KEY"),
+        api_key=os.getenv("CEREBRAS_SRT_KEY"),
         base_url="https://api.cerebras.ai/v1",
         temperature=0.2,
     )
