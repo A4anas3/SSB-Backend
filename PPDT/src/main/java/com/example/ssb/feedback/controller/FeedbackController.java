@@ -19,7 +19,7 @@ public class FeedbackController {
 
 
     @PostMapping("/feedback")
-    public Feedback submitFeedback(@RequestBody Map<String, String> body,
+    public Feedback submitFeedback(@RequestBody Map<String, Object> body,
                                    @AuthenticationPrincipal Jwt jwt) {
         Feedback fb = new Feedback();
         fb.setUserId(jwt.getSubject());
@@ -33,8 +33,19 @@ public class FeedbackController {
             fb.setUserName(jwt.getClaimAsString("email")); // fallback
         }
 
-        fb.setSubject(body.get("subject"));
-        fb.setImprovement(body.get("improvement"));
+        if (body.get("subject") != null) {
+            fb.setSubject(body.get("subject").toString());
+        }
+        if (body.get("improvement") != null) {
+            fb.setImprovement(body.get("improvement").toString());
+        }
+        if (body.get("rating") != null) {
+            try {
+                fb.setRating(Integer.parseInt(body.get("rating").toString()));
+            } catch (NumberFormatException e) {
+                // Ignore or handle invalid number format
+            }
+        }
 
         return feedbackRepository.save(fb);
     }
